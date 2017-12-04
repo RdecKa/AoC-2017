@@ -1,9 +1,9 @@
 # Advent of Code 2017
 Trying to learn how to Go.
-- [x] Day 1
-- [x] Day 2
-- [x] Day 3
-- [x] Day 4
+- [x] Day 1: Inverse Captcha
+- [x] Day 2: Corruption Checksum
+- [x] Day 3: Spiral Memory
+- [x] Day 4: High-Entropy Passphrases
 - [ ] Day 5
 - [ ] Day 6
 - [ ] Day 7

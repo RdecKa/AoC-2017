@@ -1,48 +1,73 @@
-package main
+package useful
 
 import (
-	"fmt"
 	"io/ioutil"
+	"strconv"
 	"strings"
 )
 
-func min(a, b int) int {
+// Min : returns minimum of integers a and b
+func Min(a, b int) int {
 	if a < b {
 		return a
 	}
 	return b
 }
 
-func max(a, b int) int {
+// Max : returns maximum of integers a and b
+func Max(a, b int) int {
 	if a > b {
 		return a
 	}
 	return b
 }
 
-// Reads file in a string
-func fileToString(fileName string) (inputStr string) {
+// FileToString : reads file into a string
+func FileToString(fileName string) (inputStr string) {
 	input, _ := ioutil.ReadFile("input.txt")
 	inputStr = strings.TrimSuffix(string(input), "\n")
 	return
 }
 
-// Split string on \n
-func stringToLines(input string) (inputSplit []string) {
+// StringToLines : Split string on \n, returns a list of strings
+func StringToLines(input string) (inputSplit []string) {
 	inputSplit = strings.Split(input, "\n")
 	return
 }
 
-// Converts string to list
-func splitOnWhitespace(input string) (inputSplit []string) {
+// SplitOnWhitespace : Converts string to list of words
+func SplitOnWhitespace(input string) (inputSplit []string) {
 	inputSplit = strings.Fields(input)
 	return
 }
 
-func main() {
-	input := stringToLines(fileToString("input.txt"))
-	for _, v := range input {
-		fmt.Println(splitOnWhitespace(v))
+// StringTo2DArray : creates a list of lists of strings from a string (splits on whitespaces)
+func StringTo2DArray(input string) (array2D [][]string) {
+	lines := StringToLines(input)
+	array2D = make([][]string, len(lines))
+	for i, l := range lines {
+		array2D[i] = SplitOnWhitespace(l)
 	}
-	fmt.Printf("%s\n", input)
+	return
+}
+
+// StringsToIntsArr1D : accepts list of strings and returns list of integers
+func StringsToIntsArr1D(input []string) (output []int) {
+	output = make([]int, len(input))
+	for i, v := range input {
+		output[i], _ = strconv.Atoi(v)
+	}
+	return
+}
+
+// StringsToIntsArr2D : accepts 2D array of strings and returns 2D array of integers
+func StringsToIntsArr2D(input [][]string) (output [][]int) {
+	output = make([][]int, len(input))
+	for i, l := range input {
+		output[i] = make([]int, len(l))
+		for j, v := range l {
+			output[i][j], _ = strconv.Atoi(v)
+		}
+	}
+	return
 }

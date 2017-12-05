@@ -1,9 +1,8 @@
 package main
 
 import (
+	"AoC/useful"
 	"fmt"
-	"io/ioutil"
-	"strings"
 )
 
 func puzzle1(input [][]string) int {
@@ -70,30 +69,8 @@ func hasDuplicates(list []string) bool {
 	return false
 }
 
-// Reads file in a string
-func fileToString(fileName string) (inputStr string) {
-	input, _ := ioutil.ReadFile(fileName)
-	inputStr = strings.TrimSuffix(string(input), "\n")
-	return
-}
-
-// Split string on \n
-func stringToLines(input string) (inputSplit []string) {
-	inputSplit = strings.Split(input, "\n")
-	return
-}
-
-// Converts string to list
-func splitOnWhitespace(input string) (inputSplit []string) {
-	inputSplit = strings.Fields(input)
-	return
-}
-
 func main() {
-	input := stringToLines(fileToString("input.txt"))
-	inputSplit := make([][]string, len(input))
-	for i, v := range input {
-		inputSplit[i] = splitOnWhitespace(v)
-	}
+	input := useful.FileToString("input.txt")
+	inputSplit := useful.StringTo2DArray(input)
 	fmt.Printf("Result:\nPart 1: %d\nPart 2: %d\n", puzzle1(inputSplit), puzzle2(inputSplit))
 }

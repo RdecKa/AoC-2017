@@ -4,7 +4,7 @@ Trying to learn how to Go.
 - [x] Day 2: Corruption Checksum
 - [x] Day 3: Spiral Memory
 - [x] Day 4: High-Entropy Passphrases
-- [ ] Day 5
+- [x] Day 5: A Maze of Twisty Trampolines, All Alike
 - [ ] Day 6
 - [ ] Day 7
 - [ ] Day 8

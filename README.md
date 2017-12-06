@@ -5,7 +5,7 @@ Trying to learn how to Go.
 - [x] Day 3: Spiral Memory
 - [x] Day 4: High-Entropy Passphrases
 - [x] Day 5: A Maze of Twisty Trampolines, All Alike
-- [ ] Day 6
+- [x] Day 6: Memory Reallocation
 - [ ] Day 7
 - [ ] Day 8
 - [ ] Day 9

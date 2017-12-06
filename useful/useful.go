@@ -24,7 +24,7 @@ func Max(a, b int) int {
 
 // FileToString : reads file into a string
 func FileToString(fileName string) (inputStr string) {
-	input, _ := ioutil.ReadFile("input.txt")
+	input, _ := ioutil.ReadFile(fileName)
 	inputStr = strings.TrimSuffix(string(input), "\n")
 	return
 }

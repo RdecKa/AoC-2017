@@ -1,9 +1,10 @@
 package main
 
 import (
-	"AoC/useful"
 	"fmt"
 	"strconv"
+
+	"github.com/RdecKa/AoC-2017/useful"
 )
 
 func puzzle(input []string, problem int) int {

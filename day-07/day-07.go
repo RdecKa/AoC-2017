@@ -1,10 +1,11 @@
 package main
 
 import (
-	"AoC/useful"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/RdecKa/AoC-2017/useful"
 )
 
 type program struct {
@@ -76,7 +77,7 @@ func puzzle2(input []string, root string) int {
 
 	tree := constructTree(root, progs)
 
-	printTree(tree, 0)
+	//printTree(tree, 0)
 
 	a, _ := weight(tree)
 

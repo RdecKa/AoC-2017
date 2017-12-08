@@ -1,8 +1,9 @@
 package main
 
 import (
-	"AoC/useful"
 	"fmt"
+
+	"github.com/RdecKa/AoC-2017/useful"
 )
 
 func puzzle1(input [][]string) int {

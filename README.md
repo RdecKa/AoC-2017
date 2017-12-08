@@ -7,7 +7,7 @@ Trying to learn how to Go.
 - [x] Day 5: A Maze of Twisty Trampolines, All Alike
 - [x] Day 6: Memory Reallocation
 - [x] Day 7: Recursive Circus
-- [ ] Day 8
+- [x] Day 8: I Heard You Like Registers
 - [ ] Day 9
 - [ ] Day 10
 - [ ] Day 11

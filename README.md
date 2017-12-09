@@ -8,7 +8,7 @@ Trying to learn how to Go.
 - [x] Day 6: Memory Reallocation
 - [x] Day 7: Recursive Circus
 - [x] Day 8: I Heard You Like Registers
-- [ ] Day 9
+- [x] Day 9: Stream Processing
 - [ ] Day 10
 - [ ] Day 11
 - [ ] Day 12

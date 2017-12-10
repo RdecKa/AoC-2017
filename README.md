@@ -9,7 +9,7 @@ Trying to learn how to Go.
 - [x] Day 7: Recursive Circus
 - [x] Day 8: I Heard You Like Registers
 - [x] Day 9: Stream Processing
-- [ ] Day 10
+- [x] Day 10: Knot Hash
 - [ ] Day 11
 - [ ] Day 12
 - [ ] Day 13

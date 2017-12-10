@@ -22,6 +22,19 @@ func Max(a, b int) int {
 	return b
 }
 
+// Reverse : takes pointer to array of integers, reverse part between start and end
+func Reverse(input *[]int, start, end int) {
+	for i, j := start, end-1; i < j; i, j = i+1, j-1 {
+		(*input)[i], (*input)[j] = (*input)[j], (*input)[i]
+	}
+}
+
+// CircularShift : takes pointer to array of integers, performs circular shift for 'shift' positions to the left
+func CircularShift(input *[]int, shift int) {
+	shift = shift % len(*input)
+	*input = append((*input)[shift:], (*input)[0:shift]...)
+}
+
 // FileToString : reads file into a string
 func FileToString(fileName string) (inputStr string) {
 	input, _ := ioutil.ReadFile(fileName)

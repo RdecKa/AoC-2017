@@ -52,7 +52,7 @@ func compress(input []int) []int {
 	return out
 }
 
-// returns heximal representation of number given as a list of integers
+// returns heximal representation of number given as a list of integers (hex digits)
 func toHex(input []int) string {
 	out := ""
 	for _, v := range input {
@@ -65,19 +65,6 @@ func toHex(input []int) string {
 	return out
 }
 
-// Transforms the list
-func puzzle2Repeat(input []int, list *[]int, shifted, skipSize int) (int, int) {
-	for _, len := range input {
-		useful.Reverse(list, 0, len)
-		useful.CircularShift(list, (len + skipSize))
-		shifted += len + skipSize
-		skipSize++
-	}
-	shifted %= len(*list)
-
-	return shifted, skipSize
-}
-
 func puzzle2(inputStr string) string {
 	input := stringToASCII(inputStr)
 	skipSize := 0
@@ -88,8 +75,15 @@ func puzzle2(inputStr string) string {
 	}
 
 	for i := 0; i < 64; i++ {
-		shifted, skipSize = puzzle2Repeat(input, &list, shifted, skipSize)
+		for _, len := range input {
+			useful.Reverse(&list, 0, len)
+			useful.CircularShift(&list, (len + skipSize))
+			shifted += len + skipSize
+			skipSize++
+		}
+		shifted %= len(list)
 	}
+
 	shiftBack := len(list) - shifted
 	useful.CircularShift(&list, shiftBack)
 

@@ -89,7 +89,7 @@ window.onload = function() {
 		data: {
 			json: JSON.parse(results),
 			membs : null,
-			numRankings: 10,
+			numRankings: 5,
 			numBest: 5
 		},
 

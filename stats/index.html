@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Statistics</title>
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+		<script src="data.js"></script>
+		<script src="main.js"></script>
+	</head>
+	<body>
+		<div id="stats">
+			<label>#rankings</label>
+				<input v-model.number="numRankings" type="number">
+
+			<br>
+
+			<label>#best</label>
+				<input v-model.number="numBest" type="number">
+
+			<chart></chart>
+		</div>
+	</body>
+</html>

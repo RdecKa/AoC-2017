@@ -10,7 +10,7 @@ Trying to learn how to Go.
 - [x] Day 8: I Heard You Like Registers
 - [x] Day 9: Stream Processing
 - [x] Day 10: Knot Hash
-- [ ] Day 11
+- [x] Day 11: Hex Ed
 - [ ] Day 12
 - [ ] Day 13
 - [ ] Day 14

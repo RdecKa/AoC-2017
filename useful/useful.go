@@ -22,6 +22,14 @@ func Max(a, b int) int {
 	return b
 }
 
+// Abs : returns absolute value of integer a
+func Abs(a int) int {
+	if a >= 0 {
+		return a
+	}
+	return -a
+}
+
 // Reverse : takes pointer to array of integers, reverse part between start and end
 func Reverse(input *[]int, start, end int) {
 	for i, j := start, end-1; i < j; i, j = i+1, j-1 {

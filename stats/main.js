@@ -46,7 +46,7 @@ function drawChart(membersSorted, numRanks, numBest) {
 		dataToPlot[2 * i + 1].name = rankings[i].name + " (2)";
 		dataToPlot[2 * i].dataPoints = rankings[i].star1.map((el, index) => new Object({x: index + 1, y: el}));
 		dataToPlot[2 * i + 1].dataPoints = rankings[i].star2.map((el, index) => new Object({x: index + 1, y: el}));
-		let color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
+		let color = getRandomColor();
 		dataToPlot[2 * i].color = color;
 		dataToPlot[2 * i + 1].color = color;
 		dataToPlot[2 * i].lineDashType = "dash";
@@ -81,6 +81,12 @@ function drawChart(membersSorted, numRanks, numBest) {
 	});
 	chart.render();
 }
+
+function getRandomColor() {
+    var s = "000000" + ((1 << 24) * Math.random() | 0).toString(16);
+	return "#" + s.substr(s.length - 6);
+}
+
 
 window.onload = function() {
 	let app = new Vue({

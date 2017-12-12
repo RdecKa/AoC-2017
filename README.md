@@ -11,7 +11,7 @@ Trying to learn how to Go.
 - [x] Day 9: Stream Processing
 - [x] Day 10: Knot Hash
 - [x] Day 11: Hex Ed
-- [ ] Day 12
+- [x] Day 12: Digital Plumber
 - [ ] Day 13
 - [ ] Day 14
 - [ ] Day 15

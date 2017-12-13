@@ -58,28 +58,33 @@ function drawChart(membersSorted, numRanks, numBest, maxDay) {
 
 	let chart = new CanvasJS.Chart("chart-container", {
 		title: {
-			text: "Daily results"
+			text: "Daily results",
+			fontFamily: "Open Sans, sans-serif"
 		},
 		axisX: {
 			title: "Day",
+			fontFamily: "Open Sans, sans-serif",
 			valueFormatString: "#",
 			interval: 1
 		},
 		axisY2: {
 			title: "Place",
+			fontFamily: "Open Sans, sans-serif",
 			reversed:  true,
 			minimum: 0,
 			maximum: numRanks,
 			interval: 1
 		},
 		toolTip: {
-			shared: true
+			shared: true,
+			fontFamily: "Open Sans, sans-serif"
 		},
 		legend: {
 			cursor: "pointer",
 			verticalAlign: "top",
 			horizontalAlign: "center",
-			dockInsidePlotArea: false
+			dockInsidePlotArea: false,
+			fontFamily: "Open Sans, sans-serif"
 		},
 		data: dataToPlot
 	});

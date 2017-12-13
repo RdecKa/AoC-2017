@@ -6,8 +6,7 @@ function sortOnDayStar(members, day, star) {
 }
 
 // Get rankings for numBest members for each day & each star
-function preprocessData(membersSorted, numRanks, numBest) {
-	const maxDay = Math.max(...membersSorted.map(x => Math.max(...Object.keys(x.completion_day_level))));
+function preprocessData(membersSorted, numRanks, numBest, maxDay) {
 	const best = membersSorted.slice(0, numBest);
 	let rankings = best.map(x => new Object({id: x.id, name: (x.name != null && x.name || "#" + x.id), star1: new Array(maxDay).fill(numRanks), star2: new Array(maxDay).fill(numRanks)}));
 	for (let day = 1; day <= maxDay; day++) {
@@ -28,8 +27,8 @@ function preprocessData(membersSorted, numRanks, numBest) {
 	return rankings;
 }
 
-function drawChart(membersSorted, numRanks, numBest) {
-	const rankings = preprocessData(membersSorted, numRanks, numBest);
+function drawChart(membersSorted, numRanks, numBest, maxDay) {
+	const rankings = preprocessData(membersSorted, numRanks, numBest, maxDay);
 
 	let dataToPlot = new Array(rankings.length * 2).fill().map(
 		(x, index) => new Object({
@@ -52,7 +51,7 @@ function drawChart(membersSorted, numRanks, numBest) {
 		dataToPlot[2 * i].lineDashType = "dash";
 	}
 
-	let chart = new CanvasJS.Chart("chartContainer", {
+	let chart = new CanvasJS.Chart("chart-container", {
 		title: {
 			text: "Daily results"
 		},
@@ -87,6 +86,9 @@ function getRandomColor() {
 	return "#" + s.substr(s.length - 6);
 }
 
+function showDay(members, day) {
+	return [sortOnDayStar(members, day, 1), sortOnDayStar(members, day, 2)];
+}
 
 window.onload = function() {
 	let app = new Vue({
@@ -95,22 +97,32 @@ window.onload = function() {
 		data: {
 			json: JSON.parse(results),
 			membs : null,
+			numMembs: 0,
 			numRankings: 5,
-			numBest: 5
+			numBest: 5,
+			showDay: 0,
+			maxDay : 0,
+			star1 : [],
+			star2: []
 		},
 
-		mounted: function() {
+		created: function() {
 			this.membs = Object.keys(this.json.members)
 				.map(k => this.json.members[k])
 				.filter(x => x.local_score > 0)
 				.sort((a, b) => b.local_score - a.local_score);
+			this.maxDay = Math.max(...this.membs.map(x => Math.max(...Object.keys(x.completion_day_level))));
+			this.numMembs = this.membs.length;
+		},
+
+		mounted: function() {
 			this.draw();
 		},
 
 		watch: {
 			numRankings: function(val) {
-				if (val > 50) {
-					this.numRankings = 50;
+				if (val > this.membs.length) {
+					this.numRankings = this.membs.length;
 				} else if (val < 1) {
 					this.numRankings = 1;
 				} else {
@@ -125,18 +137,26 @@ window.onload = function() {
 				} else {
 					this.draw();
 				}
+			},
+			showDay: function(val) {
+				r = this.showSelectedDay();
+				this.star1 = r[0];
+				this.star2 = r[1];
 			}
 		},
 
 		components: {
 			"chart": {
-				template: '<div id="chartContainer" style="min-height: 600px; width: 100%;"></div>'
+				template: '<div id="chart-container" style="min-height: 600px; width: 100%;"></div>'
 			}
 		},
 
 		methods: {
 			draw: function() {
-				drawChart(this.membs, this.numRankings, this.numBest);
+				drawChart(this.membs, this.numRankings + 1, this.numBest, this.maxDay);
+			},
+			showSelectedDay: function() {
+				return showDay(this.membs, this.showDay);
 			}
 		}
 	});

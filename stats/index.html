@@ -10,14 +10,26 @@
 	<body>
 		<div id="stats">
 			<label>#rankings</label>
-				<input v-model.number="numRankings" type="number">
+				<input v-model.number="numRankings" type="number" min="1" :max="numMembs">
 
 			<br>
 
 			<label>#best</label>
-				<input v-model.number="numBest" type="number">
+				<input v-model.number="numBest" type="number" min="1" :max="numMembs">
 
 			<chart></chart>
+
+			<label>Day</label>
+				<input v-model.number="showDay" type="number" min="1" :max="maxDay">
+
+			<div id="daily-stats">
+				<ol id="star1">
+					<li v-for="i in star1">{{ i }}</li>
+				</ol>
+				<ol id="star2">
+					<li v-for="i in star2">{{ i }}</li>
+				</ol>
+			</div>
 		</div>
 	</body>
 </html>

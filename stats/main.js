@@ -8,7 +8,12 @@ function sortOnDayStar(members, day, star) {
 // Get rankings for numBest members for each day & each star
 function preprocessData(membersSorted, numRanks, numBest, maxDay) {
 	const best = membersSorted.slice(0, numBest);
-	let rankings = best.map(x => new Object({id: x.id, name: (x.name != null && x.name || "#" + x.id), star1: new Array(maxDay).fill(numRanks), star2: new Array(maxDay).fill(numRanks)}));
+	let rankings = best.map(x => new Object({
+		id: x.id,
+		name: (x.name != null && x.name || "#" + x.id),
+		star1: new Array(maxDay).fill(numRanks),
+		star2: new Array(maxDay).fill(numRanks)
+	}));
 	for (let day = 1; day <= maxDay; day++) {
 		for (let star = 1; star <= 2; star++) {
 			r = sortOnDayStar(membersSorted, day, star);
@@ -86,8 +91,46 @@ function getRandomColor() {
 	return "#" + s.substr(s.length - 6);
 }
 
+// Example of list: [["id"], ["day_star", 7, 1]]
+function getNeededFromObject(obj, list) {
+	l = []
+	for (i = 0; i < list.length; i++) {
+		if (list[i][0] === "id") {
+			l.push(obj.id);
+		} else if (list[i][0] === "name") {
+			l.push(obj.name != null && obj.name || "#" + obj.id);
+		} else if (list[i][0] === "day_star") {
+			day = list[i][1]
+			star = list[i][2]
+			date = formatDate(new Date(obj.completion_day_level[day][star].get_star_ts));
+			l.push(date);
+		} else {
+			l.push(null);
+		}
+	}
+	return l;
+}
+
+function formatDate(d) {
+	return ("0" + d.getHours()).slice(-2) + ":"
+	+ ("0" + d.getMinutes()).slice(-2) + ":"
+	+ ("0" + d.getSeconds()).slice(-2) + " ("
+	+ ("0" + d.getDate()).slice(-2) + "-"
+	+ ("0"+(d.getMonth()+1)).slice(-2) + "-"
+	+ d.getFullYear() + ")";
+}
+
 function showDay(members, day) {
-	return [sortOnDayStar(members, day, 1), sortOnDayStar(members, day, 2)];
+	idResults1 = sortOnDayStar(members, day, 1);
+	idResults2 = sortOnDayStar(members, day, 2);
+
+	// Update!
+	objResults1 = idResults1.map(x => members.find(function(el) { return el.id === x; }));
+	objResults2 = idResults2.map(x => members.find(function(el) { return el.id === x; }));
+
+	out1 = objResults1.map(x => getNeededFromObject(x,  [["name"], ["day_star", day, 1]]));
+	out2 = objResults2.map(x => getNeededFromObject(x,  [["name"], ["day_star", day, 2]]));
+	return [out1, out2];
 }
 
 window.onload = function() {
@@ -100,7 +143,7 @@ window.onload = function() {
 			numMembs: 0,
 			numRankings: 5,
 			numBest: 5,
-			showDay: 0,
+			showDay: 1,
 			maxDay : 0,
 			star1 : [],
 			star2: []
@@ -117,6 +160,7 @@ window.onload = function() {
 
 		mounted: function() {
 			this.draw();
+			this.showSelectedDay();
 		},
 
 		watch: {
@@ -139,15 +183,19 @@ window.onload = function() {
 				}
 			},
 			showDay: function(val) {
-				r = this.showSelectedDay();
-				this.star1 = r[0];
-				this.star2 = r[1];
+				if (val > this.maxDay) {
+					this.showDay = this.maxDay;
+				} else if (val < 1) {
+					this.showDay = 1;
+				} else {
+					this.showSelectedDay();
+				}
 			}
 		},
 
 		components: {
 			"chart": {
-				template: '<div id="chart-container" style="min-height: 600px; width: 100%;"></div>'
+				template: '<div id="chart-container"></div>'
 			}
 		},
 
@@ -156,7 +204,9 @@ window.onload = function() {
 				drawChart(this.membs, this.numRankings + 1, this.numBest, this.maxDay);
 			},
 			showSelectedDay: function() {
-				return showDay(this.membs, this.showDay);
+				r = showDay(this.membs, this.showDay);
+				this.star1 = r[0];
+				this.star2 = r[1];
 			}
 		}
 	});

@@ -2,6 +2,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Statistics</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
 		<script src="https://unpkg.com/vue"></script>
 		<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 		<script src="data.js"></script>
@@ -19,15 +20,25 @@
 
 			<chart></chart>
 
+			<div class="vertical-break-100"></div>
+
 			<label>Day</label>
 				<input v-model.number="showDay" type="number" min="1" :max="maxDay">
 
 			<div id="daily-stats">
+
 				<ol id="star1">
-					<li v-for="i in star1">{{ i }}</li>
+					<h2>First star on Day {{ showDay }}</h2>
+					<li v-for="i in star1">
+						<span>{{ i[1] }} <strong>{{ i[0] }}</strong></span>
+					</li>
 				</ol>
+
 				<ol id="star2">
-					<li v-for="i in star2">{{ i }}</li>
+					<h2>Second star on Day {{ showDay }}</h2>
+					<li v-for="i in star2">
+						<span>{{ i[1] }} <strong>{{ i[0] }}</strong></span>
+					</li>
 				</ol>
 			</div>
 		</div>

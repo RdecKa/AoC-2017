@@ -1,0 +1,19 @@
+.vertical-break-100 {
+	margin-top: 100px;
+}
+
+#star1, #star2 {
+	float: left;
+	width: calc(50% - 40px);
+}
+
+#chart-container {
+	min-height: 600px;
+	width: 100%;
+}
+
+@media all and (max-width: 850px) {
+    #star1, #star2 {
+		width: auto;
+	}
+}

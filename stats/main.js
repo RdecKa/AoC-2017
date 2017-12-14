@@ -1,7 +1,13 @@
 // Sort members on time needed to get first/second star on selected day
 function sortOnDayStar(members, day, star) {
-	return members.filter(x => x.completion_day_level.hasOwnProperty(day) && x.completion_day_level[day].hasOwnProperty(star))
-		.sort((a, b) => new Date(a.completion_day_level[day][star].get_star_ts) - new Date(b.completion_day_level[day][star].get_star_ts))
+	return members.filter(x => {
+			return x.completion_day_level.hasOwnProperty(day)
+			&& x.completion_day_level[day].hasOwnProperty(star)
+		})
+		.sort((a, b) => {
+			return new Date(a.completion_day_level[day][star].get_star_ts).getTime()
+			- new Date(b.completion_day_level[day][star].get_star_ts).getTime()
+		})
 		.map(x => x.id);
 }
 
@@ -14,11 +20,12 @@ function preprocessData(membersSorted, numRanks, numBest, maxDay) {
 		star1: new Array(maxDay).fill(numRanks),
 		star2: new Array(maxDay).fill(numRanks)
 	}));
+
 	for (let day = 1; day <= maxDay; day++) {
 		for (let star = 1; star <= 2; star++) {
-			r = sortOnDayStar(membersSorted, day, star);
+			let r = sortOnDayStar(membersSorted, day, star);
 			for (let i = 0; i < Math.min(r.length, numRanks); i++) {
-				p = rankings.filter(x => x.id == r[i])[0];
+				let p = rankings.filter(x => x.id == r[i])[0];
 				if (typeof p !== 'undefined') {
 					if (star == 1) {
 						p.star1[day - 1] = i + 1;
@@ -35,7 +42,7 @@ function preprocessData(membersSorted, numRanks, numBest, maxDay) {
 function drawChart(membersSorted, numRanks, numBest, maxDay) {
 	const rankings = preprocessData(membersSorted, numRanks, numBest, maxDay);
 
-	let dataToPlot = new Array(rankings.length * 2).fill().map(
+	let dataToPlot = new Array(rankings.length * 2).fill(null).map(
 		(x, index) => new Object({
 			type:"line",
 			axisYType: "secondary",
@@ -48,8 +55,10 @@ function drawChart(membersSorted, numRanks, numBest, maxDay) {
 	for (let i = 0; i < rankings.length; i++) {
 		dataToPlot[2 * i].name = rankings[i].name;
 		dataToPlot[2 * i + 1].name = rankings[i].name + " (2)";
-		dataToPlot[2 * i].dataPoints = rankings[i].star1.map((el, index) => new Object({x: index + 1, y: el}));
-		dataToPlot[2 * i + 1].dataPoints = rankings[i].star2.map((el, index) => new Object({x: index + 1, y: el}));
+		dataToPlot[2 * i].dataPoints =
+			rankings[i].star1.map((el, index) => new Object({x: index + 1, y: el}));
+		dataToPlot[2 * i + 1].dataPoints =
+			rankings[i].star2.map((el, index) => new Object({x: index + 1, y: el}));
 		let color = getRandomColor();
 		dataToPlot[2 * i].color = color;
 		dataToPlot[2 * i + 1].color = color;
@@ -92,22 +101,22 @@ function drawChart(membersSorted, numRanks, numBest, maxDay) {
 }
 
 function getRandomColor() {
-    var s = "000000" + ((1 << 24) * Math.random() | 0).toString(16);
+    let s = "000000" + ((1 << 24) * Math.random() | 0).toString(16);
 	return "#" + s.substr(s.length - 6);
 }
 
 // Example of list: [["id"], ["day_star", 7, 1]]
 function getNeededFromObject(obj, list) {
-	l = []
-	for (i = 0; i < list.length; i++) {
+	let l = []
+	for (let i = 0; i < list.length; i++) {
 		if (list[i][0] === "id") {
 			l.push(obj.id);
 		} else if (list[i][0] === "name") {
 			l.push(obj.name != null && obj.name || "#" + obj.id);
 		} else if (list[i][0] === "day_star") {
-			day = list[i][1]
-			star = list[i][2]
-			date = formatDate(new Date(obj.completion_day_level[day][star].get_star_ts));
+			let day = list[i][1]
+			let star = list[i][2]
+			let date = formatDate(new Date(obj.completion_day_level[day][star].get_star_ts));
 			l.push(date);
 		} else {
 			l.push(null);
@@ -126,15 +135,15 @@ function formatDate(d) {
 }
 
 function showDay(members, day) {
-	idResults1 = sortOnDayStar(members, day, 1);
-	idResults2 = sortOnDayStar(members, day, 2);
+	let idResults1 = sortOnDayStar(members, day, 1);
+	let idResults2 = sortOnDayStar(members, day, 2);
 
-	// Update!
-	objResults1 = idResults1.map(x => members.find(function(el) { return el.id === x; }));
-	objResults2 = idResults2.map(x => members.find(function(el) { return el.id === x; }));
+	let objResults1 = idResults1.map(x => members.find(el => el.id === x));
+	let objResults2 = idResults2.map(x => members.find(el => el.id === x));
 
-	out1 = objResults1.map(x => getNeededFromObject(x,  [["name"], ["day_star", day, 1]]));
-	out2 = objResults2.map(x => getNeededFromObject(x,  [["name"], ["day_star", day, 2]]));
+	let out1 = objResults1.map(x => getNeededFromObject(x,  [["name"], ["day_star", day, 1]]));
+	let out2 = objResults2.map(x => getNeededFromObject(x,  [["name"], ["day_star", day, 2]]));
+
 	return [out1, out2];
 }
 
@@ -159,7 +168,11 @@ window.onload = function() {
 				.map(k => this.json.members[k])
 				.filter(x => x.local_score > 0)
 				.sort((a, b) => b.local_score - a.local_score);
-			this.maxDay = Math.max(...this.membs.map(x => Math.max(...Object.keys(x.completion_day_level))));
+			this.maxDay = this.membs
+				.map(x => Object.keys(x.completion_day_level)
+					.reduce((a, b) => Math.max(a, b))
+				)
+				.reduce((a, b) => Math.max(a, b));
 			this.numMembs = this.membs.length;
 		},
 
@@ -169,7 +182,7 @@ window.onload = function() {
 		},
 
 		watch: {
-			numRankings: function(val) {
+			numRankings(val) {
 				if (val > this.membs.length) {
 					this.numRankings = this.membs.length;
 				} else if (val < 1) {
@@ -178,7 +191,7 @@ window.onload = function() {
 					this.draw();
 				}
 			},
-			numBest: function(val) {
+			numBest(val) {
 				if (val > this.membs.length) {
 					this.numBest = this.membs.length;
 				} else if (val < 1) {
@@ -187,7 +200,7 @@ window.onload = function() {
 					this.draw();
 				}
 			},
-			showDay: function(val) {
+			showDay(val) {
 				if (val > this.maxDay) {
 					this.showDay = this.maxDay;
 				} else if (val < 1) {
@@ -209,7 +222,7 @@ window.onload = function() {
 				drawChart(this.membs, this.numRankings + 1, this.numBest, this.maxDay);
 			},
 			showSelectedDay: function() {
-				r = showDay(this.membs, this.showDay);
+				let r = showDay(this.membs, this.showDay);
 				this.star1 = r[0];
 				this.star2 = r[1];
 			}

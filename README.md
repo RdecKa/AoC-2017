@@ -13,7 +13,7 @@ Trying to learn how to Go.
 - [x] Day 11: Hex Ed
 - [x] Day 12: Digital Plumber
 - [x] Day 13: Packet Scanners
-- [ ] Day 14
+- [x] Day 14: Disk Defragmentation
 - [ ] Day 15
 - [ ] Day 16
 - [ ] Day 17

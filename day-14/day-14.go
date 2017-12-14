@@ -33,7 +33,7 @@ func compress(input []int) []int {
 	return out
 }
 
-// returns heximal representation of number given as a list of integers (hex digits)
+// returns hexadecimal representation of number given as a list of integers (hex digits)
 func toHex(input []int) string {
 	out := ""
 	for _, v := range input {

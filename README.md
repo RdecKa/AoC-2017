@@ -14,7 +14,7 @@ Trying to learn how to Go.
 - [x] Day 12: Digital Plumber
 - [x] Day 13: Packet Scanners
 - [x] Day 14: Disk Defragmentation
-- [ ] Day 15
+- [x] Day 15: Dueling Generators
 - [ ] Day 16
 - [ ] Day 17
 - [ ] Day 18

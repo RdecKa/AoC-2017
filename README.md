@@ -15,7 +15,7 @@ Trying to learn how to Go.
 - [x] Day 13: Packet Scanners
 - [x] Day 14: Disk Defragmentation
 - [x] Day 15: Dueling Generators
-- [ ] Day 16
+- [x] Day 16: Permutation Promenade
 - [ ] Day 17
 - [ ] Day 18
 - [ ] Day 19

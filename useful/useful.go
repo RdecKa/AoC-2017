@@ -43,6 +43,12 @@ func CircularShift(input *[]int, shift int) {
 	*input = append((*input)[shift:], (*input)[0:shift]...)
 }
 
+// CircularShiftRunes : takes pointer to array of runes, performs circular shift for 'shift' positions to the left
+func CircularShiftRunes(input *[]rune, shift int) {
+	shift = shift % len(*input)
+	*input = append((*input)[shift:], (*input)[0:shift]...)
+}
+
 // FileToString : reads file into a string
 func FileToString(fileName string) (inputStr string) {
 	input, _ := ioutil.ReadFile(fileName)
@@ -91,4 +97,14 @@ func StringsToIntsArr2D(input [][]string) (output [][]int) {
 		}
 	}
 	return
+}
+
+// SliceIndex : returns index of first element in a slice with property 'predicate' in range [start : end]
+func SliceIndex(start, end int, predicate func(i int) bool) int {
+	for i := start; i < end; i++ {
+		if predicate(i) {
+			return i
+		}
+	}
+	return -1
 }

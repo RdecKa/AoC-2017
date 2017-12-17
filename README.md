@@ -16,7 +16,7 @@ Trying to learn how to Go.
 - [x] Day 14: Disk Defragmentation
 - [x] Day 15: Dueling Generators
 - [x] Day 16: Permutation Promenade
-- [ ] Day 17
+- [x] Day 17: Spinlock
 - [ ] Day 18
 - [ ] Day 19
 - [ ] Day 20

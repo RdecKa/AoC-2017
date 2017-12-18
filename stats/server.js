@@ -1,11 +1,24 @@
 const http = require('http');
 const https = require('https');
 
-const port = 8080;
-const host = 'localhost';
+let sourceFile;
+try {
+	require.resolve( './.env' )
+	sourceFile = require('./.env');
+} catch( e ) {
+	console.log('Cannot find file .env.')
+	process.exit(1);
+}
 
-const session_cookie = 'session_cookie'; // UPDATE!
-const leaderboard_id = 'lb_id' // UPDATE!
+const port = sourceFile.port;
+const host = sourceFile.host;
+const session_cookie = sourceFile.session_cookie
+const leaderboard_id = sourceFile.leaderboard_id
+
+if ([port, host, session_cookie, leaderboard_id].some(x => x == null)) {
+	console.log('Make sure that the following variables are declared in your .env file:\n- port\n- host\n- session_cookie\n- leaderboard_id');
+	process.exit(1);
+}
 
 const server = http.createServer((req, res) => {
 	if (req.url === '/aoc-data') {

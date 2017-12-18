@@ -16,6 +16,19 @@ body {
 	width: 100%;
 }
 
+#changeData {
+	float: right;
+}
+
+#changeData:hover {
+	cursor: pointer;
+	color: #612BBE;
+}
+
+.error {
+	color: #BE2100;
+}
+
 @media all and (max-width: 850px) {
     #star1, #star2 {
 		width: auto;

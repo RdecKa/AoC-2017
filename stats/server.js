@@ -27,7 +27,10 @@ const server = http.createServer((req, res) => {
 	const url_parts = url.parse(req.url, true);
 	const query = url_parts.query;
 	if (url_parts.pathname === '/aoc-data') {
-		getData(query.leaderboard_id, query.session_cookie, data => sendData(res, data));
+		getData(query.leaderboard_id, query.session_cookie,
+			data => sendData(res, data),
+			(message, status) => sendError(res, message, status)
+		);
 	}
 });
 
@@ -41,7 +44,13 @@ function sendData(res, data) {
 	res.end();
 }
 
-function getData(leaderboard_id, session_cookie, callback) {
+function sendError(res, message, status) {
+	res.writeHead(status, {'Content-Type': 'text/html', 'Access-Control-Allow-Origin': '*'});
+	res.write(message);
+	res.end();
+}
+
+function getData(leaderboard_id, session_cookie, callback, callbackError) {
 	const options = {
 		hostname: 'adventofcode.com',
 		path: `/2017/leaderboard/private/view/${leaderboard_id}.json`,
@@ -54,16 +63,16 @@ function getData(leaderboard_id, session_cookie, callback) {
 
 		let error;
 		if (statusCode !== 200) {
-			error = new Error('Request Failed.\n' +
-							`Status Code: ${statusCode}`);
+			error = new Error();
 		} else if (!/^application\/json/.test(contentType)) {
-			error = new Error('Invalid content-type.\n' +
+			error = new Error('Invalid content-type. ' +
 							`Expected application/json but received ${contentType}`);
 		}
 		if (error) {
 			// consume response data to free up memory
 			res.resume();
-			console.log(error.message);
+			let message = `${error.message} - Did you enter correct leaderboard ID and session cookie?`;
+			callbackError(message, statusCode);
 			return
 		}
 
@@ -75,10 +84,11 @@ function getData(leaderboard_id, session_cookie, callback) {
 			try {
 				callback(JSON.parse(rawData));
 			} catch (e) {
-				console.log(e.message);
+				callbackError(e.message, e.status);
 			}
 		});
 	}).on('error', (e) => {
-		console.log(`Got error: ${e.message}`);
+		let message = `Got error: ${e.message} - Did you enter correct leaderboard ID and session cookie?`;
+		callbackError(message, e.status);
 	});
 }

@@ -147,8 +147,8 @@ function showDay(members, day) {
 	return [out1, out2];
 }
 
-window.onload = function() {
-	let app = new Vue({
+function createStatistics() {
+	return new Vue({
 		el: '#stats',
 
 		data: {
@@ -160,33 +160,11 @@ window.onload = function() {
 			showDay: 1,
 			maxDay : 0,
 			star1 : [],
-			star2: []
-		},
-
-		created: function() {
-			this.$http.get('http://localhost:8080/aoc-data', {
-				params: {
-					leaderboard_id: 'leaderboard_id',
-					session_cookie: 'session_cookie'
-				}
-			}).then(response => {
-				this.json = response.body;
-				this.membs = Object.keys(this.json.members)
-					.map(k => this.json.members[k])
-					.filter(x => x.local_score > 0)
-					.sort((a, b) => b.local_score - a.local_score);
-				this.maxDay = this.membs
-					.map(x => Object.keys(x.completion_day_level)
-						.reduce((a, b) => Math.max(a, b))
-					)
-					.reduce((a, b) => Math.max(a, b));
-				this.numMembs = this.membs.length;
-
-				this.draw();
-				this.showSelectedDay();
-			}, response => {
-				console.error("Oooops. Something went wrong. Did you forget to run the server?");
-			});
+			star2: [],
+			display: false,
+			leaderboardID: '',
+			sessionCookie: '',
+			message: ''
 		},
 
 		watch: {
@@ -226,9 +204,41 @@ window.onload = function() {
 		},
 
 		methods: {
+			init: function() {
+				localStorage.setItem('aocsessioncookie', this.sessionCookie);
+				localStorage.setItem('aoclbid', this.leaderboardID);
+				this.display = true;
+
+				this.$http.get('http://localhost:8080/aoc-data', {
+				params: {
+					leaderboard_id: this.leaderboardID,
+					session_cookie: this.sessionCookie
+				}
+				}).then(response => {
+					this.json = response.body;
+					this.membs = Object.keys(this.json.members)
+						.map(k => this.json.members[k])
+						.filter(x => x.local_score > 0)
+						.sort((a, b) => b.local_score - a.local_score);
+					this.maxDay = this.membs
+						.map(x => Object.keys(x.completion_day_level)
+							.reduce((a, b) => Math.max(a, b))
+						)
+						.reduce((a, b) => Math.max(a, b));
+					this.numMembs = this.membs.length;
+
+					this.draw();
+					this.showSelectedDay();
+				}, response => {
+					this.display = false;
+					this.message = response.status + " " + response.body;
+				});
+			},
+
 			draw: function() {
 				drawChart(this.membs, this.numRankings + 1, this.numBest, this.maxDay);
 			},
+
 			showSelectedDay: function() {
 				let r = showDay(this.membs, this.showDay);
 				this.star1 = r[0];
@@ -236,4 +246,19 @@ window.onload = function() {
 			}
 		}
 	});
+}
+
+let app
+window.onload = function() {
+	app = createStatistics();
+
+	const sessionCookie = localStorage.getItem('aocsessioncookie');
+	const leaderboardID = localStorage.getItem('aoclbid');
+
+	if (sessionCookie && leaderboardID) {
+		app.display = true;
+		app.sessionCookie = sessionCookie;
+		app.leaderboardID = leaderboardID;
+		app.init();
+	}
 };

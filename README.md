@@ -17,7 +17,7 @@ Trying to learn how to Go.
 - [x] Day 15: Dueling Generators
 - [x] Day 16: Permutation Promenade
 - [x] Day 17: Spinlock
-- [ ] Day 18
+- [x] Day 18: Duet
 - [ ] Day 19
 - [ ] Day 20
 - [ ] Day 21

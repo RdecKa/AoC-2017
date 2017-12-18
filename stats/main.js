@@ -164,7 +164,12 @@ window.onload = function() {
 		},
 
 		created: function() {
-			this.$http.get('http://localhost:8080/aoc-data').then(response => {
+			this.$http.get('http://localhost:8080/aoc-data', {
+				params: {
+					leaderboard_id: 'leaderboard_id',
+					session_cookie: 'session_cookie'
+				}
+			}).then(response => {
 				this.json = response.body;
 				this.membs = Object.keys(this.json.members)
 					.map(k => this.json.members[k])

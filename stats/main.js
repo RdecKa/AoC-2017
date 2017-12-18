@@ -152,7 +152,7 @@ window.onload = function() {
 		el: '#stats',
 
 		data: {
-			json: JSON.parse(results),
+			json: null,
 			membs : null,
 			numMembs: 0,
 			numRankings: 5,
@@ -164,21 +164,24 @@ window.onload = function() {
 		},
 
 		created: function() {
-			this.membs = Object.keys(this.json.members)
-				.map(k => this.json.members[k])
-				.filter(x => x.local_score > 0)
-				.sort((a, b) => b.local_score - a.local_score);
-			this.maxDay = this.membs
-				.map(x => Object.keys(x.completion_day_level)
-					.reduce((a, b) => Math.max(a, b))
-				)
-				.reduce((a, b) => Math.max(a, b));
-			this.numMembs = this.membs.length;
-		},
+			this.$http.get('http://localhost:8080/aoc-data').then(response => {
+				this.json = response.body;
+				this.membs = Object.keys(this.json.members)
+					.map(k => this.json.members[k])
+					.filter(x => x.local_score > 0)
+					.sort((a, b) => b.local_score - a.local_score);
+				this.maxDay = this.membs
+					.map(x => Object.keys(x.completion_day_level)
+						.reduce((a, b) => Math.max(a, b))
+					)
+					.reduce((a, b) => Math.max(a, b));
+				this.numMembs = this.membs.length;
 
-		mounted: function() {
-			this.draw();
-			this.showSelectedDay();
+				this.draw();
+				this.showSelectedDay();
+			}, response => {
+				console.error("Oooops. Something went wrong. Did you forget to run the server?");
+			});
 		},
 
 		watch: {

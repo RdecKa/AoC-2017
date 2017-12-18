@@ -1,5 +1,9 @@
 const http = require('http');
 const https = require('https');
+const Vue = require('vue');
+const VueResource = require('vue-resource');
+
+Vue.use(VueResource);
 
 let sourceFile;
 try {
@@ -31,7 +35,7 @@ server.listen(port, () => {
 });
 
 function sendData(res, data) {
-	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.writeHead(200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'});
 	res.write(JSON.stringify(data));
 	res.end();
 }

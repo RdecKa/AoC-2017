@@ -8,7 +8,10 @@
 	"scripts": {
 		"start": "node server.js"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"vue": "latest",
+		"vue-resource": "latest"
+	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/RdecKa/AoC-2017"

@@ -4,38 +4,46 @@ import (
 	"fmt"
 )
 
-var aSeed, bSeed, rem, lowestBits int64 = 16807, 48271, 2147483647, 65536 - 1
+var seedA, seedB int64 = 16807, 48271
+var startA, startB int64 = 783, 325
+var rem, lowestBits int64 = 2147483647, 65536 - 1
+var numRounds1, numRounds2 int = 40000000, 5000000
 
-func genPicky(old, seed, divide int64) int64 {
-	n := (old * seed) % rem
-	for n&(divide-1) != 0 {
-		n = (n * seed) % rem
+func generator(start, factor, _ int64) func() int64 {
+	n := start
+	return func() int64 {
+		n = (n * factor) % rem
+		return n
 	}
-	return n
 }
 
-func gen(old, seed, _ int64) int64 {
-	return (old * seed) % rem
+func generatorPicky(start, factor, divide int64) func() int64 {
+	n := start
+	return func() int64 {
+		n = (n * factor) % rem
+		for n&(divide-1) != 0 {
+			n = (n * factor) % rem
+		}
+		return n
+	}
 }
 
-func puzzle(startA, startB, numRounds int, genFunc func(int64, int64, int64) int64) int {
+func puzzle(numRounds int, gen func(int64, int64, int64) func() int64) int {
+	genA := gen(startA, seedA, 4)
+	genB := gen(startB, seedB, 8)
 	count := 0
-	var a, b = int64(startA), int64(startB)
 	for r := 0; r < numRounds; r++ {
-		newA := genFunc(a, aSeed, 4)
-		newB := genFunc(b, bSeed, 8)
+		newA := genA()
+		newB := genB()
 		if (newA & lowestBits) == (newB & lowestBits) {
 			count++
 		}
-		a, b = newA, newB
 	}
 	return count
 }
 
 func main() {
-	startA, startB := 783, 325
-
 	fmt.Println("Results:")
-	fmt.Printf("Part1: %d\n", puzzle(startA, startB, 40000000, gen))
-	fmt.Printf("Part2: %d\n", puzzle(startA, startB, 5000000, genPicky))
+	fmt.Printf("Part1: %d\n", puzzle(numRounds1, generator))
+	fmt.Printf("Part2: %d\n", puzzle(numRounds2, generatorPicky))
 }

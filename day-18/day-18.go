@@ -100,6 +100,48 @@ func updateVal(m map[string]int64, PC int64, instrs [][]string) (bool, int64, in
 	return canContinue, newPC, sendValue
 }
 
+func runWhileYouCan(instrs [][]string, reg map[string]int64, qu, quOther *[]int64, term, termOther, wait, waitOther *bool, PC *int64) int {
+	canContinue, newPC, sendValue, count := true, int64(-1), int64(-1), 0
+	for !*term && canContinue {
+		canContinue, newPC, sendValue = updateVal(reg, *PC, instrs)
+		if sendValue == -3 {
+			// Process terminated
+			*term = true
+			return count
+		}
+		if !canContinue {
+			if instrs[*PC][0] == "rcv" {
+				if len(*qu) > 0 {
+					// Read from queue
+					reg[instrs[*PC][1]] = (*qu)[0]
+					*qu = (*qu)[1:]
+					canContinue = true
+					newPC++
+				} else {
+					// No data to read, wait
+					*wait = true
+					if *waitOther {
+						// Deadlock
+						*term = true
+						*termOther = true
+					}
+				}
+			} else if instrs[*PC][0] == "snd" {
+				*quOther = append(*quOther, sendValue)
+				canContinue = true
+				count++
+				// If the other process was waiting, it doesn't have to wait anymore
+				*waitOther = false
+			} else {
+				// Process terminated
+				*term = true
+			}
+		}
+		*PC = newPC
+	}
+	return count
+}
+
 func puzzle2(input [][]string) int {
 	reg0 := map[string]int64{"p": 0}
 	reg1 := map[string]int64{"p": 1}
@@ -108,83 +150,13 @@ func puzzle2(input [][]string) int {
 	qu0, qu1 := make([]int64, 0), make([]int64, 0)
 
 	var term0, term1, wait0, wait1 bool
-	var PC0, PC1, sendValue, newPC int64
+	var PC0, PC1 int64
 
 	count := 0
-	var canContinue = true
 
-	for !term0 && !term1 { // While at least one still runs
-		for !term0 && canContinue {
-			canContinue, newPC, sendValue = updateVal(reg0, PC0, input)
-			if sendValue == -3 {
-				term0 = true // Process 0 terminated
-				break
-			}
-			if !canContinue {
-				if input[PC0][0] == "rcv" {
-					if len(qu0) > 0 {
-						// Read from queue
-						reg0[input[PC0][1]] = qu0[0]
-						qu0 = qu0[1:]
-						canContinue = true
-						newPC++
-					} else {
-						// No data to read, wait
-						wait0 = true
-						if wait1 {
-							// Deadlock
-							term0 = true
-							term1 = true
-						}
-					}
-				} else if input[PC0][0] == "snd" {
-					qu1 = append(qu1, sendValue)
-					canContinue = true
-					// If process 1 was waiting, it doesn't have to wait anymore
-					wait1 = false
-				} else {
-					// Process 0 terminated
-					term0 = true
-				}
-			}
-			PC0 = newPC
-		}
-
-		canContinue = true
-
-		for !term1 && canContinue {
-			canContinue, newPC, sendValue = updateVal(reg1, PC1, input)
-			if sendValue == -3 {
-				term1 = true
-				break
-			}
-			if !canContinue {
-				if input[PC1][0] == "rcv" {
-					if len(qu1) > 0 {
-						reg1[input[PC1][1]] = qu1[0]
-						qu1 = qu1[1:]
-						canContinue = true
-						newPC++
-					} else {
-						wait1 = true
-						if wait0 {
-							term0 = true
-							term1 = true
-						}
-					}
-				} else if input[PC1][0] == "snd" {
-					qu0 = append(qu0, sendValue)
-					canContinue = true
-					count++
-					wait0 = false
-				} else {
-					term1 = true
-				}
-			}
-			PC1 = newPC
-		}
-
-		canContinue = true
+	for !term0 && !term1 { // Loop while at least one still runs
+		runWhileYouCan(input, reg0, &qu0, &qu1, &term0, &term1, &wait0, &wait1, &PC0)
+		count += runWhileYouCan(input, reg1, &qu1, &qu0, &term1, &term0, &wait1, &wait0, &PC1)
 	}
 
 	return count

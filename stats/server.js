@@ -9,17 +9,19 @@ const leaderboard_id = 'lb_id' // UPDATE!
 
 const server = http.createServer((req, res) => {
 	if (req.url === '/aoc-data') {
-		getData((data) => {
-			res.writeHead(200, {'Content-Type': 'application/json'});
-			res.write(JSON.stringify(data));
-			res.end();
-		});
+		getData(data => sendData(res, data));
 	}
 });
 
 server.listen(port, () => {
 	console.log(`Server running at http://${host}:${port}/`);
 });
+
+function sendData(res, data) {
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.write(JSON.stringify(data));
+	res.end();
+}
 
 function getData(callback) {
 	const options = {

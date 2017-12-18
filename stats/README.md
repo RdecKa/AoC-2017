@@ -1,5 +1,7 @@
 # Show daily results
-At first run the following:
+At first, rename file *.env.example* to *.env*.
+
+Then run the following:
 
 ```
 npm install

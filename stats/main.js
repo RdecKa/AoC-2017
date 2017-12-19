@@ -231,7 +231,11 @@ function createStatistics() {
 					this.showSelectedDay();
 				}, response => {
 					this.display = false;
-					this.message = response.status + " " + response.body;
+					if (response.status == 0) {
+						this.message = "Cannot connect to your (local) server. Is it running?"
+					} else {
+						this.message = response.status + " " + response.body;
+					}
 				});
 			},
 

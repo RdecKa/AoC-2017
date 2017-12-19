@@ -88,7 +88,7 @@ function getData(leaderboard_id, session_cookie, callback, callbackError) {
 			}
 		});
 	}).on('error', (e) => {
-		let message = `Got error: ${e.message} - Did you enter correct leaderboard ID and session cookie?`;
+		let message = `${e.message} - Did you enter correct leaderboard ID and session cookie?`;
 		callbackError(message, e.status);
 	});
 }

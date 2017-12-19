@@ -18,7 +18,7 @@ Trying to learn how to Go.
 - [x] Day 16: Permutation Promenade
 - [x] Day 17: Spinlock
 - [x] Day 18: Duet
-- [ ] Day 19
+- [x] Day 19: A Series of Tubes
 - [ ] Day 20
 - [ ] Day 21
 - [ ] Day 22

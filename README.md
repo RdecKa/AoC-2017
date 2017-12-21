@@ -19,8 +19,8 @@ Trying to learn how to Go.
 - [x] Day 17: Spinlock
 - [x] Day 18: Duet
 - [x] Day 19: A Series of Tubes
-- [ ] Day 20
-- [ ] Day 21
+- [x] Day 20: Particle Swarm
+- [x] Day 21: Fractal Art
 - [ ] Day 22
 - [ ] Day 23
 - [ ] Day 24

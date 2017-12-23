@@ -22,6 +22,6 @@ Trying to learn how to Go.
 - [x] Day 20: Particle Swarm
 - [x] Day 21: Fractal Art
 - [x] Day 22: Sporifica Virus
-- [ ] Day 23
+- [x] Day 23: Coprocessor Conflagration
 - [ ] Day 24
 - [ ] Day 25

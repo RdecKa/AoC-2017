@@ -23,5 +23,5 @@ Trying to learn how to Go.
 - [x] Day 21: Fractal Art
 - [x] Day 22: Sporifica Virus
 - [x] Day 23: Coprocessor Conflagration
-- [ ] Day 24
+- [x] Day 24: Electromagnetic Moat
 - [ ] Day 25

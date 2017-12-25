@@ -24,4 +24,4 @@ Trying to learn how to Go.
 - [x] Day 22: Sporifica Virus
 - [x] Day 23: Coprocessor Conflagration
 - [x] Day 24: Electromagnetic Moat
-- [ ] Day 25
+- [x] Day 25: The Halting Problem

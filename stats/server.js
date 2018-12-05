@@ -53,7 +53,7 @@ function sendError(res, message, status) {
 function getData(leaderboard_id, session_cookie, callback, callbackError) {
 	const options = {
 		hostname: 'adventofcode.com',
-		path: `/2017/leaderboard/private/view/${leaderboard_id}.json`,
+		path: `/2018/leaderboard/private/view/${leaderboard_id}.json`,
 		headers: {'Cookie': `session=${session_cookie}`}
 	};
 

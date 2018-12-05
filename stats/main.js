@@ -5,8 +5,8 @@ function sortOnDayStar(members, day, star) {
 			&& x.completion_day_level[day].hasOwnProperty(star)
 		})
 		.sort((a, b) => {
-			return new Date(a.completion_day_level[day][star].get_star_ts).getTime()
-			- new Date(b.completion_day_level[day][star].get_star_ts).getTime()
+			return new Date(a.completion_day_level[day][star].get_star_ts*1000).getTime()
+			- new Date(b.completion_day_level[day][star].get_star_ts*1000).getTime()
 		})
 		.map(x => x.id);
 }
@@ -116,7 +116,7 @@ function getNeededFromObject(obj, list) {
 		} else if (list[i][0] === "day_star") {
 			let day = list[i][1]
 			let star = list[i][2]
-			let date = formatDate(new Date(obj.completion_day_level[day][star].get_star_ts));
+			let date = formatDate(new Date(obj.completion_day_level[day][star].get_star_ts*1000));
 			l.push(date);
 		} else {
 			l.push(null);
